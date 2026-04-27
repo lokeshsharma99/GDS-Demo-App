@@ -7,7 +7,8 @@ import PersonalDetailsStep from './components/PersonalDetailsStep';
 import ContactInformationStep from './components/ContactInformationStep';
 import AdditionalInformationStep from './components/AdditionalInformationStep';
 import ConfirmationStep from './components/ConfirmationStep';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import GovUKHeader from './components/GovUKHeader';
+import GovUKFooter from './components/GovUKFooter';
 
 const TOTAL_STEPS = 4;
 const STEP_TITLES = ['Personal', 'Contact', 'Additional', 'Confirmation'];
@@ -152,70 +153,132 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="bg-black text-white py-2">
-        <div className="max-w-4xl mx-auto px-4">
-          <button 
-            onClick={handleBackToServices}
-            className="text-sm hover:underline"
-          >
-            ← Back to all services
-          </button>
-        </div>
-      </div>
-      
-      <div className="bg-blue-600 text-white py-4">
-        <div className="max-w-4xl mx-auto px-4">
-          <h1 className="text-xl font-bold">Apply for Universal Credit</h1>
-        </div>
-      </div>
-      
-      <div className="max-w-4xl mx-auto px-4 py-8">
+    <>
+      <a href="#main-content" className="govuk-skip-link">
+        Skip to main content
+      </a>
+
+      <GovUKHeader serviceName="Apply for Universal Credit" serviceUrl="#" />
+
+      <div
+        id="main-content"
+        style={{
+          maxWidth: '960px',
+          margin: '0 auto',
+          padding: '30px 15px',
+          fontFamily: '"GDS Transport", arial, sans-serif',
+        }}
+      >
+        {/* Back link */}
         {!isSubmitted && (
-          <ProgressIndicator 
-            currentStep={currentStep} 
-            totalSteps={TOTAL_STEPS} 
+          <nav aria-label="Back" style={{ marginBottom: '20px' }}>
+            <a
+              href="#"
+              onClick={(e) => { e.preventDefault(); handleBackToServices(); }}
+              style={{
+                color: '#1d70b8',
+                fontSize: '14px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                textDecoration: 'underline',
+              }}
+            >
+              &#8592; Back to services
+            </a>
+          </nav>
+        )}
+
+        {!isSubmitted && (
+          <ProgressIndicator
+            currentStep={currentStep}
+            totalSteps={TOTAL_STEPS}
             stepTitles={STEP_TITLES}
           />
         )}
-        
-        <div className="bg-white">
+
+        <main>
           {renderStep()}
-          
-          <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
-            {currentStep > 1 && currentStep < TOTAL_STEPS ? (
+
+          {!isSubmitted && (
+            <div
+              style={{
+                display: 'flex',
+                gap: '20px',
+                marginTop: '30px',
+                paddingTop: '20px',
+                borderTop: '1px solid #b1b4b6',
+                flexWrap: 'wrap',
+              }}
+            >
+              {/* Continue / Submit button */}
               <button
                 type="button"
-                onClick={handlePrevious}
-                className="inline-flex items-center px-4 py-2 text-blue-600 bg-white border-2 border-blue-600 rounded-none font-bold hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+                onClick={handleButtonClick}
+                style={{
+                  backgroundColor: '#00703c',
+                  color: '#ffffff',
+                  fontWeight: 700,
+                  fontSize: '19px',
+                  fontFamily: '"GDS Transport", arial, sans-serif',
+                  border: 'none',
+                  padding: '11px 20px',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 0 #002d18',
+                }}
               >
-                <ChevronLeft size={20} className="mr-1" />
-                Previous
+                {getButtonText()}
               </button>
-            ) : (
-              <div></div>
-            )}
-            
-            <button
-              type="button"
-              onClick={handleButtonClick}
-              className="inline-flex items-center px-6 py-3 bg-green-600 text-white font-bold rounded-none hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
-            >
-              {getButtonText()}
-              {currentStep < TOTAL_STEPS && (
-                <ChevronRight size={20} className="ml-1" />
+
+              {/* Previous button */}
+              {currentStep > 1 && currentStep < TOTAL_STEPS && (
+                <button
+                  type="button"
+                  onClick={handlePrevious}
+                  style={{
+                    backgroundColor: 'transparent',
+                    color: '#1d70b8',
+                    fontWeight: 400,
+                    fontSize: '19px',
+                    fontFamily: '"GDS Transport", arial, sans-serif',
+                    border: 'none',
+                    padding: '11px 0',
+                    cursor: 'pointer',
+                    textDecoration: 'underline',
+                  }}
+                >
+                  Previous
+                </button>
               )}
-            </button>
-          </div>
-        </div>
+            </div>
+          )}
+
+          {isSubmitted && (
+            <div style={{ marginTop: '30px' }}>
+              <button
+                type="button"
+                onClick={handleBackToServices}
+                style={{
+                  backgroundColor: '#1d70b8',
+                  color: '#ffffff',
+                  fontWeight: 700,
+                  fontSize: '19px',
+                  fontFamily: '"GDS Transport", arial, sans-serif',
+                  border: 'none',
+                  padding: '11px 20px',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 0 #003078',
+                }}
+              >
+                Return to services
+              </button>
+            </div>
+          )}
+        </main>
       </div>
-      
-      <footer className="bg-gray-100 border-t border-gray-300 py-6 mt-12">
-        <div className="max-w-4xl mx-auto px-4 text-center text-gray-600 text-sm">
-          <p>Apply for Universal Credit online - a secure government service.</p>
-        </div>
-      </footer>
-    </div>
+
+      <GovUKFooter />
+    </>
   );
 }
 

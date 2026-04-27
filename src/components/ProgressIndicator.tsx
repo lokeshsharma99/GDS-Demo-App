@@ -1,5 +1,4 @@
 import React from 'react';
-import { Check } from 'lucide-react';
 
 interface ProgressIndicatorProps {
   currentStep: number;
@@ -7,51 +6,73 @@ interface ProgressIndicatorProps {
   stepTitles: string[];
 }
 
-const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({ 
-  currentStep, 
-  totalSteps, 
-  stepTitles 
+const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
+  currentStep,
+  totalSteps,
+  stepTitles,
 }) => {
   return (
-    <div className="mb-8">
-      <div className="flex items-center justify-between">
+    <nav aria-label="Progress through application" style={{ marginBottom: '30px' }}>
+      <p
+        style={{
+          fontSize: '14px',
+          color: '#505a5f',
+          margin: '0 0 10px 0',
+          fontFamily: '"GDS Transport", arial, sans-serif',
+        }}
+      >
+        Step {currentStep} of {totalSteps}
+      </p>
+
+      <ol
+        style={{
+          listStyle: 'none',
+          padding: 0,
+          margin: 0,
+          display: 'flex',
+          gap: 0,
+          flexWrap: 'nowrap',
+          overflow: 'hidden',
+        }}
+        aria-label="Application steps"
+      >
         {stepTitles.map((title, index) => {
           const stepNumber = index + 1;
           const isCompleted = stepNumber < currentStep;
           const isCurrent = stepNumber === currentStep;
-          
+
           return (
-            <div key={index} className="flex items-center">
-              <div className="flex flex-col items-center">
-                <div
-                  className={`
-                    w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold
-                    ${isCompleted 
-                      ? 'bg-green-600 text-white' 
-                      : isCurrent 
-                        ? 'bg-blue-600 text-white' 
-                        : 'bg-gray-300 text-gray-600'
-                    }
-                  `}
-                >
-                  {isCompleted ? <Check size={16} /> : stepNumber}
-                </div>
-                <span className={`mt-2 text-xs text-center max-w-20 ${
-                  isCurrent ? 'text-blue-600 font-semibold' : 'text-gray-600'
-                }`}>
-                  {title}
-                </span>
-              </div>
-              {index < totalSteps - 1 && (
-                <div className={`flex-1 h-0.5 mx-4 ${
-                  isCompleted ? 'bg-green-600' : 'bg-gray-300'
-                }`} />
-              )}
-            </div>
+            <li
+              key={index}
+              aria-current={isCurrent ? 'step' : undefined}
+              style={{
+                flex: 1,
+                borderTop: `4px solid ${
+                  isCompleted ? '#00703c' : isCurrent ? '#1d70b8' : '#b1b4b6'
+                }`,
+                paddingTop: '8px',
+                marginRight: index < totalSteps - 1 ? '4px' : 0,
+              }}
+            >
+              <span
+                style={{
+                  display: 'block',
+                  fontSize: '14px',
+                  fontFamily: '"GDS Transport", arial, sans-serif',
+                  color: isCurrent ? '#1d70b8' : isCompleted ? '#00703c' : '#505a5f',
+                  fontWeight: isCurrent ? 700 : 400,
+                }}
+              >
+                {isCompleted && (
+                  <span style={{ display: 'none' }}>Completed – </span>
+                )}
+                {title}
+              </span>
+            </li>
           );
         })}
-      </div>
-    </div>
+      </ol>
+    </nav>
   );
 };
 

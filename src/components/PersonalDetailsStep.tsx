@@ -15,40 +15,68 @@ const PersonalDetailsStep: React.FC<PersonalDetailsStepProps> = ({
 }) => {
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-2">Personal Details</h2>
-      <p className="text-gray-600 mb-8">Please provide your basic personal information.</p>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <FormInput
-          label="First Name"
-          name="firstName"
-          value={formData.firstName}
-          onChange={onChange}
-        />
-        
-        <FormInput
-          label="Last Name"
-          name="lastName"
-          value={formData.lastName}
-          onChange={onChange}
-        />
-        
-        <FormInput
-          label="Date of Birth"
-          name="dateOfBirth"
-          type="date"
-          value={formData.dateOfBirth}
-          onChange={onChange}
-        />
-        
-        <FormInput
-          label="National Insurance Number"
-          name="nationalInsurance"
-          value={formData.nationalInsurance}
-          onChange={onChange}
-          placeholder="QQ 12 34 56 C"
-        />
-      </div>
+      <h1
+        style={{
+          fontSize: '36px',
+          fontWeight: 700,
+          color: '#0b0c0c',
+          marginBottom: '10px',
+          fontFamily: '"GDS Transport", arial, sans-serif',
+          lineHeight: 1.1,
+        }}
+      >
+        Personal details
+      </h1>
+      <p
+        style={{
+          fontSize: '19px',
+          color: '#505a5f',
+          marginBottom: '30px',
+          fontFamily: '"GDS Transport", arial, sans-serif',
+        }}
+      >
+        Please provide your basic personal information.
+      </p>
+
+      <FormInput
+        label="First name"
+        name="firstName"
+        value={formData.firstName}
+        onChange={onChange}
+        error={errors.firstName}
+        required
+      />
+
+      <FormInput
+        label="Last name"
+        name="lastName"
+        value={formData.lastName}
+        onChange={onChange}
+        error={errors.lastName}
+        required
+      />
+
+      <FormInput
+        label="Date of birth"
+        name="dateOfBirth"
+        type="date"
+        value={formData.dateOfBirth}
+        onChange={onChange}
+        error={errors.dateOfBirth}
+        hint="For example, 31 3 1980"
+        required
+      />
+
+      <FormInput
+        label="National Insurance number"
+        name="nationalInsurance"
+        value={formData.nationalInsurance}
+        onChange={onChange}
+        error={errors.nationalInsurance}
+        hint="It's on your National Insurance card, benefit letter, payslip or P60. For example, 'QQ 12 34 56 C'."
+        placeholder="QQ 12 34 56 C"
+        required
+      />
     </div>
   );
 };

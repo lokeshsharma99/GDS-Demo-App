@@ -1,6 +1,5 @@
 import React from 'react';
 import { FormData } from '../types/form';
-import { CheckCircle } from 'lucide-react';
 
 interface ConfirmationStepProps {
   formData: FormData;
@@ -17,7 +16,7 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({ formData }) => {
   };
 
   const getEmploymentLabel = (value: string) => {
-    const options = {
+    const options: Record<string, string> = {
       'employed': 'Employed',
       'self-employed': 'Self-employed',
       'unemployed': 'Unemployed',
@@ -25,77 +24,162 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({ formData }) => {
       'retired': 'Retired',
       'other': 'Other'
     };
-    return options[value as keyof typeof options] || value;
+    return options[value] || value;
   };
+
+  const summaryRows = [
+    { label: 'First name', value: formData.firstName },
+    { label: 'Last name', value: formData.lastName },
+    { label: 'Date of birth', value: formatDate(formData.dateOfBirth) },
+    { label: 'National Insurance number', value: formData.nationalInsurance },
+    { label: 'Email address', value: formData.email },
+    { label: 'Telephone number', value: formData.phone },
+    { label: 'Address', value: [formData.address, formData.city, formData.postcode].filter(Boolean).join(', ') },
+    { label: 'Employment status', value: getEmploymentLabel(formData.employmentStatus) },
+    ...(formData.additionalInfo ? [{ label: 'Additional information', value: formData.additionalInfo }] : []),
+  ];
 
   return (
     <div>
-      <div className="text-center mb-8">
-        <CheckCircle className="mx-auto w-16 h-16 text-green-600 mb-4" />
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Universal Credit Application Submitted</h2>
-        <p className="text-gray-600">Thank you for applying for Universal Credit. Here's a summary of your application:</p>
+      {/* Panel – GDS confirmation panel */}
+      <div
+        role="status"
+        aria-live="polite"
+        style={{
+          backgroundColor: '#00703c',
+          color: '#ffffff',
+          padding: '30px',
+          marginBottom: '30px',
+        }}
+      >
+        <h1
+          style={{
+            fontSize: '36px',
+            fontWeight: 700,
+            color: '#ffffff',
+            margin: '0 0 10px 0',
+            fontFamily: '"GDS Transport", arial, sans-serif',
+            lineHeight: 1.1,
+          }}
+        >
+          Application submitted
+        </h1>
+        <p
+          style={{
+            fontSize: '24px',
+            color: '#ffffff',
+            margin: 0,
+            fontFamily: '"GDS Transport", arial, sans-serif',
+          }}
+        >
+          Your reference number
+          <br />
+          <strong>UC-{Math.random().toString(36).substring(2, 10).toUpperCase()}</strong>
+        </p>
       </div>
-      
-      <div className="bg-gray-50 border-l-4 border-blue-600 p-6 mb-8">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Your Details</h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-          <div>
-            <dt className="font-bold text-gray-700">Name:</dt>
-            <dd className="text-gray-900">{formData.firstName} {formData.lastName}</dd>
-          </div>
-          
-          <div>
-            <dt className="font-bold text-gray-700">Date of Birth:</dt>
-            <dd className="text-gray-900">{formatDate(formData.dateOfBirth)}</dd>
-          </div>
-          
-          <div>
-            <dt className="font-bold text-gray-700">National Insurance Number:</dt>
-            <dd className="text-gray-900">{formData.nationalInsurance}</dd>
-          </div>
-          
-          <div>
-            <dt className="font-bold text-gray-700">Email:</dt>
-            <dd className="text-gray-900">{formData.email}</dd>
-          </div>
-          
-          <div>
-            <dt className="font-bold text-gray-700">Phone:</dt>
-            <dd className="text-gray-900">{formData.phone}</dd>
-          </div>
-          
-          <div>
-            <dt className="font-bold text-gray-700">Employment Status:</dt>
-            <dd className="text-gray-900">{getEmploymentLabel(formData.employmentStatus)}</dd>
-          </div>
-          
-          <div className="md:col-span-2">
-            <dt className="font-bold text-gray-700">Address:</dt>
-            <dd className="text-gray-900">
-              {formData.address}<br />
-              {formData.city}, {formData.postcode}
+
+      <p
+        style={{
+          fontSize: '19px',
+          color: '#0b0c0c',
+          marginBottom: '30px',
+          fontFamily: '"GDS Transport", arial, sans-serif',
+        }}
+      >
+        We have sent you a confirmation email.
+      </p>
+
+      {/* GDS Summary list */}
+      <h2
+        style={{
+          fontSize: '24px',
+          fontWeight: 700,
+          color: '#0b0c0c',
+          marginBottom: '20px',
+          fontFamily: '"GDS Transport", arial, sans-serif',
+        }}
+      >
+        Application summary
+      </h2>
+
+      <dl
+        style={{
+          margin: 0,
+          borderTop: '1px solid #b1b4b6',
+        }}
+      >
+        {summaryRows.map((row) => (
+          <div
+            key={row.label}
+            style={{
+              display: 'flex',
+              gap: '20px',
+              borderBottom: '1px solid #b1b4b6',
+              padding: '10px 0',
+              flexWrap: 'wrap',
+            }}
+          >
+            <dt
+              style={{
+                fontSize: '19px',
+                fontWeight: 700,
+                color: '#0b0c0c',
+                flex: '0 0 200px',
+                fontFamily: '"GDS Transport", arial, sans-serif',
+              }}
+            >
+              {row.label}
+            </dt>
+            <dd
+              style={{
+                fontSize: '19px',
+                color: '#0b0c0c',
+                flex: 1,
+                margin: 0,
+                fontFamily: '"GDS Transport", arial, sans-serif',
+                wordBreak: 'break-word',
+              }}
+            >
+              {row.value}
             </dd>
           </div>
-          
-          {formData.additionalInfo && (
-            <div className="md:col-span-2">
-              <dt className="font-bold text-gray-700">Additional Information:</dt>
-              <dd className="text-gray-900">{formData.additionalInfo}</dd>
-            </div>
-          )}
-        </div>
-      </div>
-      
-      <div className="bg-blue-50 border border-blue-200 rounded p-4">
-        <h4 className="font-bold text-blue-900 mb-2">What happens next with your Universal Credit application?</h4>
-        <ul className="text-blue-800 text-sm space-y-1">
-          <li>• We'll review your Universal Credit application within 5 working days</li>
-          <li>• You'll receive an email confirmation with your application reference</li>
-          <li>• We may contact you for additional information or to arrange an interview</li>
-          <li>• You'll be notified of the decision by email and post</li>
-        </ul>
-      </div>
+        ))}
+      </dl>
+
+      {/* What happens next */}
+      <h2
+        style={{
+          fontSize: '24px',
+          fontWeight: 700,
+          color: '#0b0c0c',
+          marginTop: '30px',
+          marginBottom: '10px',
+          fontFamily: '"GDS Transport", arial, sans-serif',
+        }}
+      >
+        What happens next
+      </h2>
+      <p
+        style={{
+          fontSize: '19px',
+          color: '#0b0c0c',
+          marginBottom: '10px',
+          fontFamily: '"GDS Transport", arial, sans-serif',
+        }}
+      >
+        We'll review your application and contact you within 5 working days.
+      </p>
+      <p
+        style={{
+          fontSize: '19px',
+          color: '#0b0c0c',
+          fontFamily: '"GDS Transport", arial, sans-serif',
+        }}
+      >
+        <a href="https://www.gov.uk/universal-credit" style={{ color: '#1d70b8' }}>
+          Find out more about Universal Credit
+        </a>
+      </p>
     </div>
   );
 };
