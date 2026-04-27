@@ -1,0 +1,32 @@
+name: Initialize Wiki
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  init-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main repo
+        uses: actions/checkout@v4
+
+      - name: Push wiki pages
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          WIKI_DIR=$(mktemp -d)
+          git clone "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.wiki.git" "$WIKI_DIR" 2>/dev/null || true
+
+          cd "$WIKI_DIR"
+          git init 2>/dev/null || true
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.wiki.git" 2>/dev/null || true
+
+          cp "$GITHUB_WORKSPACE/wiki/"*.md .
+
+          git add .
+          git commit -m "Add wiki pages" || echo "Nothing to commit"
+          git push --force origin HEAD:master
