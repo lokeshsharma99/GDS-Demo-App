@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, Users, Home, CreditCard, FileText, Shield, Clock, Search, Baby, Briefcase, Heart, GraduationCap, Car, Phone } from 'lucide-react';
+import { ArrowRight, CreditCard, Shield, Clock, Search, Phone } from 'lucide-react';
 
 interface LandingPageProps {
   onSelectService: (service: string) => void;
@@ -10,7 +10,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onSelectService }) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   const services = [
-    // Benefits and Financial Support
     {
       id: 'universal-credit',
       title: 'Apply for Universal Credit',
@@ -20,89 +19,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onSelectService }) => {
       timeToComplete: '30-45 minutes',
       category: 'benefits',
       popular: true
-    },
-    {
-      id: 'housing-benefit',
-      title: 'Apply for Housing Benefit',
-      description: 'Housing Benefit can help you pay your rent if you\'re unemployed, on a low income or claiming benefits.',
-      icon: <Home className="w-8 h-8" />,
-      eligibility: 'You can apply if you pay rent and have a low income or are on benefits.',
-      timeToComplete: '25-35 minutes',
-      category: 'benefits',
-      popular: true
-    },
-    {
-      id: 'council-tax-support',
-      title: 'Apply for Council Tax Support',
-      description: 'Council Tax Support can help you pay your council tax bill if you\'re on a low income or claiming benefits.',
-      icon: <FileText className="w-8 h-8" />,
-      eligibility: 'You can apply if you\'re responsible for paying council tax and on a low income.',
-      timeToComplete: '15-20 minutes',
-      category: 'benefits',
-      popular: false
-    },
-    {
-      id: 'disability-benefits',
-      title: 'Apply for Disability Benefits',
-      description: 'Personal Independence Payment (PIP) helps with extra living costs if you have a long-term physical or mental health condition.',
-      icon: <Users className="w-8 h-8" />,
-      eligibility: 'You can apply if you\'re aged 16 to 64 and have a health condition or disability.',
-      timeToComplete: '45-60 minutes',
-      category: 'benefits',
-      popular: false
-    },
-    // Family and Children
-    {
-      id: 'child-benefit',
-      title: 'Apply for Child Benefit',
-      description: 'Child Benefit is a tax-free payment that can help you with the costs of your children.',
-      icon: <Baby className="w-8 h-8" />,
-      eligibility: 'You can get Child Benefit if you\'re responsible for bringing up a child who is under 16.',
-      timeToComplete: '20-30 minutes',
-      category: 'family',
-      popular: true
-    },
-    {
-      id: 'childcare-support',
-      title: 'Apply for Childcare Support',
-      description: 'Get help with childcare costs through Tax-Free Childcare or 30 hours free childcare.',
-      icon: <Heart className="w-8 h-8" />,
-      eligibility: 'Available for working parents with children under 11 (or under 17 with disabilities).',
-      timeToComplete: '25-35 minutes',
-      category: 'family',
-      popular: false
-    },
-    // Employment and Education
-    {
-      id: 'jobseekers-allowance',
-      title: 'Apply for Jobseeker\'s Allowance',
-      description: 'Jobseeker\'s Allowance (JSA) is a benefit for people who are looking for work.',
-      icon: <Briefcase className="w-8 h-8" />,
-      eligibility: 'You can apply if you\'re unemployed or working less than 16 hours per week.',
-      timeToComplete: '35-45 minutes',
-      category: 'employment',
-      popular: true
-    },
-    {
-      id: 'student-finance',
-      title: 'Apply for Student Finance',
-      description: 'Get financial support for university or college, including tuition fee loans and maintenance loans.',
-      icon: <GraduationCap className="w-8 h-8" />,
-      eligibility: 'Available for UK students starting higher education courses.',
-      timeToComplete: '40-60 minutes',
-      category: 'education',
-      popular: true
-    },
-    // Transport and Driving
-    {
-      id: 'blue-badge',
-      title: 'Apply for a Blue Badge',
-      description: 'A Blue Badge helps people with disabilities or health conditions park closer to their destination.',
-      icon: <Car className="w-8 h-8" />,
-      eligibility: 'Available for people with permanent or temporary mobility issues.',
-      timeToComplete: '15-25 minutes',
-      category: 'transport',
-      popular: false
     }
   ];
 
@@ -216,10 +132,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onSelectService }) => {
                     <button
                       onClick={() => onSelectService(service.id)}
                       className="w-full bg-green-600 text-white font-bold py-2 px-4 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 transition-colors duration-200 flex items-center justify-center text-sm"
-                      disabled={service.id !== 'universal-credit'}
                     >
-                      {service.id === 'universal-credit' ? 'Start now' : 'Coming soon'}
-                      {service.id === 'universal-credit' && <ArrowRight className="w-4 h-4 ml-2" />}
+                      Start now
+                      <ArrowRight className="w-4 h-4 ml-2" />
                     </button>
                   </div>
                 </div>
@@ -271,37 +186,26 @@ const LandingPage: React.FC<LandingPageProps> = ({ onSelectService }) => {
                         )}
                       </div>
                     </div>
-                    
                     <p className="text-gray-700 mb-4">
                       {service.description}
                     </p>
-                    
                     <div className="mb-4">
                       <h4 className="font-bold text-gray-900 mb-2">Who can apply:</h4>
                       <p className="text-sm text-gray-700">
                         {service.eligibility}
                       </p>
                     </div>
-                    
                     <div className="flex items-center text-sm text-gray-600 mb-6">
                       <Clock className="w-4 h-4 mr-2" />
                       <span>Takes {service.timeToComplete} to complete</span>
                     </div>
-                    
                     <button
                       onClick={() => onSelectService(service.id)}
                       className="w-full bg-green-600 text-white font-bold py-3 px-6 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 transition-colors duration-200 flex items-center justify-center"
-                      disabled={service.id !== 'universal-credit'}
                     >
-                      {service.id === 'universal-credit' ? 'Start application' : 'Coming soon'}
-                      {service.id === 'universal-credit' && <ArrowRight className="w-5 h-5 ml-2" />}
+                      Start application
+                      <ArrowRight className="w-5 h-5 ml-2" />
                     </button>
-                    
-                    {service.id !== 'universal-credit' && (
-                      <p className="text-xs text-gray-500 mt-2 text-center">
-                        This service will be available soon
-                      </p>
-                    )}
                   </div>
                 </div>
               ))}
