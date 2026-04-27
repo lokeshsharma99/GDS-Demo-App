@@ -67,7 +67,7 @@ stages:
 
     - task: AzureWebApp@1
       inputs:
-        azureSubscription: 'c3efdcab-3249-4063-8e26-a69191a3a268'
+        azureSubscription: 'GDS-DemoApp-Azure-Connection'
         appType: 'webAppLinux'
         appName: '$(appName)'
         package: '$(System.ArtifactsDirectory)/drop/app.zip'
