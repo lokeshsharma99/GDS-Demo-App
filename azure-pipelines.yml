@@ -1,6 +1,7 @@
 # Azure Pipeline for deploying React/Vite app to Azure Web App
 trigger:
 - main
+- coderabbitai/utg/5859c22
 
 pool:
   vmImage: 'ubuntu-latest'
