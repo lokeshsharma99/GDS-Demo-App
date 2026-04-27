@@ -1,4 +1,4 @@
-# Azure Pipeline for building React/Vite app
+# Azure Pipeline for building and deploying React/Vite app
 trigger:
 - main
 - coderabbitai/utg/5859c22
@@ -6,35 +6,69 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '20.x'
-  displayName: 'Install Node.js'
+variables:
+  # Azure Web App details
+  appName: 'GDS-DemoApp'
 
-- task: Npm@1
-  inputs:
-    command: 'install'
-  displayName: 'Install Dependencies'
-
-- task: Npm@1
-  inputs:
-    command: 'custom'
-    customCommand: 'run build'
+stages:
+- stage: Build
   displayName: 'Build React Application'
+  jobs:
+  - job: Build
+    displayName: 'Build and Package'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '20.x'
+      displayName: 'Install Node.js'
 
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist'
-    includeRootFolder: false
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
-    replaceExistingArchive: true
-  displayName: 'Archive Build Output'
+    - task: Npm@1
+      inputs:
+        command: 'install'
+      displayName: 'Install Dependencies'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/app.zip'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-  displayName: 'Publish Artifacts'
+    - task: Npm@1
+      inputs:
+        command: 'custom'
+        customCommand: 'run build'
+      displayName: 'Build React Application'
+
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/dist'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
+        replaceExistingArchive: true
+      displayName: 'Archive Build Output'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/app.zip'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+      displayName: 'Publish Artifacts'
+
+- stage: Deploy
+  displayName: 'Deploy to Azure Web App'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy to Azure Web App'
+    steps:
+    - task: DownloadBuildArtifacts@1
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(System.ArtifactsDirectory)'
+      displayName: 'Download Artifacts'
+
+    - task: AzureWebApp@1
+      inputs:
+        azureSubscription: 'c3efdcab-3249-4063-8e26-a69191a3a268'
+        appType: 'webAppLinux'
+        appName: '$(appName)'
+        package: '$(System.ArtifactsDirectory)/drop/app.zip'
+      displayName: 'Deploy to Azure Web App'
