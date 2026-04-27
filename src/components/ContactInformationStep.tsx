@@ -15,52 +15,79 @@ const ContactInformationStep: React.FC<ContactInformationStepProps> = ({
 }) => {
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-2">Contact Information</h2>
-      <p className="text-gray-600 mb-8">Please provide your contact details and address.</p>
-      
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormInput
-            label="Email Address"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={onChange}
-          />
-          
-          <FormInput
-            label="Phone Number"
-            name="phone"
-            type="tel"
-            value={formData.phone}
-            onChange={onChange}
-          />
-        </div>
-        
-        <FormInput
-          label="Address"
-          name="address"
-          value={formData.address}
-          onChange={onChange}
-        />
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormInput
-            label="City"
-            name="city"
-            value={formData.city}
-            onChange={onChange}
-          />
-          
-          <FormInput
-            label="Postcode"
-            name="postcode"
-            value={formData.postcode}
-            onChange={onChange}
-            placeholder="SW1A 1AA"
-          />
-        </div>
-      </div>
+      <h1
+        style={{
+          fontSize: '36px',
+          fontWeight: 700,
+          color: '#0b0c0c',
+          marginBottom: '10px',
+          fontFamily: '"GDS Transport", arial, sans-serif',
+          lineHeight: 1.1,
+        }}
+      >
+        Contact information
+      </h1>
+      <p
+        style={{
+          fontSize: '19px',
+          color: '#505a5f',
+          marginBottom: '30px',
+          fontFamily: '"GDS Transport", arial, sans-serif',
+        }}
+      >
+        Please provide your contact details and address.
+      </p>
+
+      <FormInput
+        label="Email address"
+        name="email"
+        type="email"
+        value={formData.email}
+        onChange={onChange}
+        error={errors.email}
+        hint="We'll only use this to contact you about your application."
+        required
+      />
+
+      <FormInput
+        label="UK telephone number"
+        name="phone"
+        type="tel"
+        value={formData.phone}
+        onChange={onChange}
+        error={errors.phone}
+        hint="Include the country code for international numbers."
+        required
+      />
+
+      <FormInput
+        label="Address line 1"
+        name="address"
+        value={formData.address}
+        onChange={onChange}
+        error={errors.address}
+        required
+      />
+
+      <FormInput
+        label="Town or city"
+        name="city"
+        value={formData.city}
+        onChange={onChange}
+        error={errors.city}
+        required
+      />
+
+      <FormInput
+        label="Postcode"
+        name="postcode"
+        value={formData.postcode}
+        onChange={onChange}
+        error={errors.postcode}
+        placeholder="SW1A 1AA"
+        hint="For example, SW1A 1AA"
+        required
+      />
     </div>
   );
 };

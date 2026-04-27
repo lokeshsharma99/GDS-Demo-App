@@ -1,3 +1,95 @@
+/* GDS Transport font stack */
+@import url('https://fonts.googleapis.com/css2?family=GDS+Transport&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --govuk-colour-black: #0b0c0c;
+  --govuk-colour-white: #ffffff;
+  --govuk-colour-yellow: #ffdd00;
+  --govuk-colour-red: #d4351c;
+  --govuk-colour-blue: #1d70b8;
+  --govuk-colour-dark-blue: #003078;
+  --govuk-colour-light-blue: #5694ca;
+  --govuk-colour-purple: #4c2c92;
+  --govuk-colour-dark-grey: #505a5f;
+  --govuk-colour-mid-grey: #b1b4b6;
+  --govuk-colour-light-grey: #f3f2f1;
+  --govuk-colour-green: #00703c;
+  --govuk-colour-turquoise: #28a197;
+  --govuk-focus-colour: #ffdd00;
+  --govuk-focus-text-colour: #0b0c0c;
+  --govuk-text-colour: #0b0c0c;
+  --govuk-secondary-text-colour: #505a5f;
+  --govuk-border-colour: #b1b4b6;
+  --govuk-input-border-colour: #0b0c0c;
+  --govuk-error-colour: #d4351c;
+  --govuk-brand-colour: #1d70b8;
+  --govuk-link-colour: #1d70b8;
+  --govuk-link-hover-colour: #003078;
+  --govuk-link-visited-colour: #4c2c92;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "GDS Transport", arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--govuk-text-colour);
+  background-color: var(--govuk-colour-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Skip to main content link */
+.govuk-skip-link {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.govuk-skip-link:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  clip: auto;
+  clip-path: none;
+  white-space: normal;
+  display: block;
+  padding: 10px 15px;
+  background: var(--govuk-colour-yellow);
+  color: var(--govuk-colour-black);
+  text-decoration: none;
+  font-weight: bold;
+  outline: none;
+}
+
+/* Focus styles */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid var(--govuk-focus-colour);
+  outline-offset: 0;
+  background-color: var(--govuk-focus-colour);
+  color: var(--govuk-focus-text-colour);
+  box-shadow: 0 -2px var(--govuk-focus-colour), 0 4px var(--govuk-focus-text-colour);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  background-color: var(--govuk-colour-white);
+  outline: 3px solid var(--govuk-focus-colour);
+  box-shadow: inset 0 0 0 2px;
+}

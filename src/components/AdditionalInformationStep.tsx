@@ -24,28 +24,50 @@ const AdditionalInformationStep: React.FC<AdditionalInformationStepProps> = ({
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-2">Additional Information</h2>
-      <p className="text-gray-600 mb-8">Please provide some additional details about yourself.</p>
-      
-      <div className="space-y-6">
-        <FormInput
-          label="Employment Status"
-          name="employmentStatus"
-          as="select"
-          value={formData.employmentStatus}
-          onChange={onChange}
-          options={employmentOptions}
-        />
-        
-        <FormInput
-          label="Additional Information"
-          name="additionalInfo"
-          as="textarea"
-          value={formData.additionalInfo}
-          onChange={onChange}
-          placeholder="Please provide any additional information you think would be helpful..."
-        />
-      </div>
+      <h1
+        style={{
+          fontSize: '36px',
+          fontWeight: 700,
+          color: '#0b0c0c',
+          marginBottom: '10px',
+          fontFamily: '"GDS Transport", arial, sans-serif',
+          lineHeight: 1.1,
+        }}
+      >
+        Additional information
+      </h1>
+      <p
+        style={{
+          fontSize: '19px',
+          color: '#505a5f',
+          marginBottom: '30px',
+          fontFamily: '"GDS Transport", arial, sans-serif',
+        }}
+      >
+        Please provide some additional details about yourself.
+      </p>
+
+      <FormInput
+        label="Employment status"
+        name="employmentStatus"
+        as="select"
+        value={formData.employmentStatus}
+        onChange={onChange}
+        error={errors.employmentStatus}
+        options={employmentOptions}
+        required
+      />
+
+      <FormInput
+        label="Additional information"
+        name="additionalInfo"
+        as="textarea"
+        value={formData.additionalInfo}
+        onChange={onChange}
+        error={errors.additionalInfo}
+        hint="Tell us anything else you think is relevant to your application."
+        placeholder="Please provide any additional information you think would be helpful..."
+      />
     </div>
   );
 };
