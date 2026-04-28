@@ -15,6 +15,7 @@ permissions:
   pull-requests: write
   pages: write
   id-token: write
+  models: read
 
 concurrency:
   group: pages
@@ -162,13 +163,66 @@ jobs:
           path: allure-results/
           retention-days: 7
 
-  # ── 4. Build, Allure Report & Deploy (main branch only) ───────────────────
+  # ── 4. RCA Agent (runs only on E2E failure) ───────────────────────────────
+  rca-agent:
+    name: Test Failure RCA
+    runs-on: ubuntu-latest
+    needs: functional-regression
+    # Only run when the E2E job fails — this is the whole point
+    if: failure() && needs.functional-regression.result == 'failure'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2   # need HEAD~1 for git diff
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Download E2E JUnit results
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-traces
+          path: test-results/
+        continue-on-error: true
+
+      - name: Resolve PR number
+        id: pr
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+          else
+            # For push events, find the PR that introduced this commit
+            PR=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" \
+              -H "Accept: application/vnd.github+json" | jq -r '.[0].number // ""')
+            echo "number=$PR" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run RCA Agent
+        run: node scripts/rca-agent.mjs
+        continue-on-error: true   # RCA failure should not block anything
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          JUNIT_PATH: test-results/e2e-junit.xml
+
+  # ── 5. Build, Allure Report & Deploy (main branch only) ───────────────────
   build-and-deploy:
     name: Build, Report & Deploy
     runs-on: ubuntu-latest
     needs: [functional-regression, sonar-analysis]
-    # Only deploy from main — not on PRs
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    # Only deploy from main — not on PRs, not if tests failed
+    if: |
+      github.ref == 'refs/heads/main' &&
+      github.event_name != 'pull_request' &&
+      needs.functional-regression.result == 'success'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
