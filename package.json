@@ -33,6 +33,8 @@
     "@vitejs/plugin-react": "^4.3.1",
     "@vitest/coverage-v8": "^4.1.5",
     "@vitest/ui": "^4.1.5",
+    "allure-commandline": "^2.38.1",
+    "allure-playwright": "^3.7.1",
     "autoprefixer": "^10.4.18",
     "esbuild": "^0.28.0",
     "eslint": "^9.9.1",

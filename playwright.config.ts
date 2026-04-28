@@ -10,6 +10,16 @@ export default defineConfig({
     ['list'],
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
     ['junit', { outputFile: 'test-results/e2e-junit.xml' }],
+    ['allure-playwright', {
+      detail: true,
+      outputFolder: 'allure-results',
+      suiteTitle: false,
+      environmentInfo: {
+        framework: 'Playwright',
+        application: 'GDS Demo App',
+        environment: process.env.CI ? 'CI' : 'local',
+      },
+    }],
   ],
   use: {
     baseURL: 'http://localhost:12000',
