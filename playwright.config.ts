@@ -34,7 +34,12 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev',
+    // In CI: serve the production build via `vite preview` so tests run against
+    // the same compiled output that will be deployed.
+    // Locally: use the Vite dev server for a faster feedback loop.
+    command: process.env.CI
+      ? 'npx vite preview'
+      : 'npm run dev',
     url: 'http://localhost:12000',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,

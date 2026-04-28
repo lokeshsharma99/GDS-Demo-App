@@ -88,6 +88,12 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Build app (production build for E2E)
+        # Tests run against the production build via `vite preview`, not the dev server.
+        # No VITE_BASE_URL here so the app is served at / (matching baseURL in playwright.config.ts).
+        # The deploy job builds separately with VITE_BASE_URL=/GDS-Demo-App/ for GitHub Pages.
+        run: npm run build
+
       - name: Run functional regression suite
         run: npm run test:e2e
         env:

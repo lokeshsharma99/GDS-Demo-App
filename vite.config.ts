@@ -35,4 +35,8 @@ export default defineConfig({
     port: 12000,
     allowedHosts: true,
   },
+  preview: {
+    host: '0.0.0.0',
+    port: 12000,
+  },
 });
