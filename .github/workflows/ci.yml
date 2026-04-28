@@ -1,0 +1,209 @@
+name: CI — Build, Test & Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  # ── 1. Unit Tests ──────────────────────────────────────────────────────────
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests with coverage
+        run: npm run test:coverage
+
+      - name: Publish unit test results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Vitest Unit Tests
+          path: test-results/junit.xml
+          reporter: jest-junit
+          fail-on-error: true
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 30
+
+      - name: Coverage summary comment
+        uses: davelosert/vitest-coverage-report-action@v2
+        if: always()
+        with:
+          json-summary-path: coverage/coverage-summary.json
+          json-final-path: coverage/coverage-final.json
+
+  # ── 2. Functional Regression (E2E) ────────────────────────────────────────
+  functional-regression:
+    name: Functional Regression (E2E)
+    runs-on: ubuntu-latest
+    needs: unit-tests
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run functional regression suite
+        run: npm run test:e2e
+        env:
+          CI: true
+
+      - name: Publish E2E test results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Functional Regression Tests
+          path: test-results/e2e-junit.xml
+          reporter: jest-junit
+          fail-on-error: false
+
+      - name: Upload Playwright HTML report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload failure traces and screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-traces
+          path: test-results/
+          retention-days: 7
+
+      - name: Upload allure-results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-results
+          path: allure-results/
+          retention-days: 7
+
+  # ── 3. Build, Allure Report & Deploy (main branch only) ───────────────────
+  build-and-deploy:
+    name: Build, Report & Deploy
+    runs-on: ubuntu-latest
+    needs: functional-regression
+    # Only deploy from main — not on PRs
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build app
+        run: npm run build
+        env:
+          VITE_BASE_URL: /GDS-Demo-App/
+
+      - name: Download allure-results
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+        continue-on-error: true
+
+      - name: Set up Java (required by allure-commandline)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Generate Allure HTML report
+        run: |
+          if [ -d "allure-results" ] && [ "$(ls -A allure-results)" ]; then
+            npx allure generate allure-results --clean -o dist/allure-report
+            echo "Allure report generated"
+          else
+            echo "No allure-results found — creating placeholder"
+            mkdir -p dist/allure-report
+            cat > dist/allure-report/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head><meta charset="UTF-8"><title>Allure Report — GDS Demo App</title>
+          <style>body{font-family:arial,sans-serif;padding:40px;color:#0b0c0c}h1{color:#1d70b8}</style>
+          </head>
+          <body>
+            <h1>No test results available yet</h1>
+            <p>The functional regression suite has not produced results for this run.</p>
+            <p><a href="../">Back to application</a></p>
+          </body></html>
+          EOF
+          fi
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Write job summary
+        run: |
+          echo "## CI Pipeline Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| | Link |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| Application | https://lokeshsharma99.github.io/GDS-Demo-App/ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Allure Report | https://lokeshsharma99.github.io/GDS-Demo-App/allure-report/ |" >> $GITHUB_STEP_SUMMARY
