@@ -26,6 +26,7 @@ test.describe('FR-01: Landing Page', () => {
   test('FR-01-04: Start Now button is present and navigates to Step 1', async ({ page }) => {
     const startBtn = page.getByRole('button', { name: /start now/i });
     await expect(startBtn).toBeVisible();
+    await page.getByRole('radio', { name: /universal credit/i }).check();
     await startBtn.click();
     await expect(page.getByText(/Personal details/i)).toBeVisible();
   });

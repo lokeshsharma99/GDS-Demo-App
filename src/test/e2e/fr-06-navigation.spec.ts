@@ -98,6 +98,7 @@ test.describe('FR-06: Navigation and Progress Indicator', () => {
     await expect(page.getByRole('button', { name: /start now/i })).toBeVisible();
 
     // Re-enter the form and check fields are empty
+    await page.getByRole('radio', { name: /universal credit/i }).check();
     await page.getByRole('button', { name: /start now/i }).click();
     await expect(page.getByLabel('First name')).toHaveValue('');
   });

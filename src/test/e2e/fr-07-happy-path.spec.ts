@@ -47,6 +47,7 @@ test.describe('FR-07: Full Happy Path — Complete Application Journey', () => {
     await expect(page.getByRole('contentinfo')).toBeVisible();
 
     // Step 1
+    await page.getByRole('radio', { name: /universal credit/i }).check();
     await page.getByRole('button', { name: /start now/i }).click();
     await expect(page.getByRole('banner')).toBeVisible();
     await expect(page.getByRole('contentinfo')).toBeVisible();

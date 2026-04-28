@@ -47,8 +47,9 @@ export async function fillStep3(page: import('@playwright/test').Page, data = VA
 }
 
 /** Navigate from landing page to Step 1 */
-export async function startApplication(page: import('@playwright/test').Page) {
+export async function startApplication(page: import('@playwright/test').Page, service = 'universal-credit') {
   await page.goto('/');
+  await page.getByRole('radio', { name: /universal credit/i }).check();
   await page.getByRole('button', { name: /start now/i }).click();
 }
 

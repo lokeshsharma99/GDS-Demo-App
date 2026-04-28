@@ -48,6 +48,7 @@ test.describe('FR-08: Keyboard Accessibility', () => {
 
   test('FR-08-10: Start now button is activatable by keyboard', async ({ page }) => {
     await page.goto('/');
+    await page.getByRole('radio', { name: /universal credit/i }).check();
     const startBtn = page.getByRole('button', { name: /start now/i });
     await startBtn.focus();
     await expect(startBtn).toBeFocused();
