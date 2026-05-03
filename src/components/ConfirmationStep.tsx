@@ -6,12 +6,16 @@ interface ConfirmationStepProps {
 }
 
 const ConfirmationStep: React.FC<ConfirmationStepProps> = ({ formData }) => {
-  const formatDate = (dateString: string) => {
-    if (!dateString) return '';
-    return new Date(dateString).toLocaleDateString('en-GB', {
+  const formatDate = (day: string, month: string, year: string) => {
+    if (!day || !month || !year) return '';
+    const d = parseInt(day, 10);
+    const m = parseInt(month, 10);
+    const y = parseInt(year, 10);
+    if (isNaN(d) || isNaN(m) || isNaN(y)) return `${day}/${month}/${year}`;
+    return new Date(y, m - 1, d).toLocaleDateString('en-GB', {
       day: 'numeric',
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
     });
   };
 
@@ -30,7 +34,7 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({ formData }) => {
   const summaryRows = [
     { label: 'First name', value: formData.firstName },
     { label: 'Last name', value: formData.lastName },
-    { label: 'Date of birth', value: formatDate(formData.dateOfBirth) },
+    { label: 'Date of birth', value: formatDate(formData.dobDay, formData.dobMonth, formData.dobYear) },
     { label: 'National Insurance number', value: formData.nationalInsurance },
     { label: 'Email address', value: formData.email },
     { label: 'Telephone number', value: formData.phone },

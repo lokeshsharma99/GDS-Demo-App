@@ -2,7 +2,9 @@ export interface FormData {
   // Personal Details
   firstName: string;
   lastName: string;
-  dateOfBirth: string;
+  dobDay: string;
+  dobMonth: string;
+  dobYear: string;
   nationalInsurance: string;
   
   // Contact Information

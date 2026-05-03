@@ -81,11 +81,6 @@ const FormInput: React.FC<FormInputProps> = ({
         }}
       >
         {label}
-        {required && (
-          <span style={{ color: '#d4351c', marginLeft: '4px' }} aria-hidden="true">
-            *
-          </span>
-        )}
       </label>
 
       {hint && (
@@ -115,7 +110,7 @@ const FormInput: React.FC<FormInputProps> = ({
             fontFamily: '"GDS Transport", arial, sans-serif',
           }}
         >
-          <span style={{ display: 'none' }}>Error: </span>
+          <span>Error: </span>
           {error}
         </p>
       )}
@@ -170,7 +165,6 @@ const FormInput: React.FC<FormInputProps> = ({
             name === 'address' ? 'address-line1' :
             name === 'city' ? 'address-level2' :
             name === 'postcode' ? 'postal-code' :
-            name === 'dateOfBirth' ? 'bday' :
             undefined
           }
           style={inputStyle}

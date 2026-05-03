@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormData, FormErrors } from '../types/form';
 import FormInput from './FormInput';
+import DateInput from './DateInput';
 
 interface PersonalDetailsStepProps {
   formData: FormData;
@@ -56,15 +57,14 @@ const PersonalDetailsStep: React.FC<PersonalDetailsStepProps> = ({
         required
       />
 
-      <FormInput
-        label="Date of birth"
-        name="dateOfBirth"
-        type="date"
-        value={formData.dateOfBirth}
-        onChange={onChange}
-        error={errors.dateOfBirth}
+      <DateInput
+        legend="Date of birth"
         hint="For example, 31 3 1980"
-        required
+        error={errors.dob}
+        dayValue={formData.dobDay}
+        monthValue={formData.dobMonth}
+        yearValue={formData.dobYear}
+        onChange={onChange}
       />
 
       <FormInput
