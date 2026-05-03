@@ -7,7 +7,9 @@ export const VALID_FORM_DATA = {
   // Step 1 — Personal Details
   firstName: 'Jane',
   lastName: 'Smith',
-  dateOfBirth: '1985-06-15',
+  dobDay: '15',
+  dobMonth: '6',
+  dobYear: '1985',
   nationalInsurance: 'AB 12 34 56 C',
   // Step 2 — Contact Information
   email: 'jane.smith@example.com',
@@ -24,7 +26,9 @@ export const VALID_FORM_DATA = {
 export async function fillStep1(page: import('@playwright/test').Page, data = VALID_FORM_DATA) {
   await page.getByLabel('First name').fill(data.firstName);
   await page.getByLabel('Last name').fill(data.lastName);
-  await page.getByLabel('Date of birth').fill(data.dateOfBirth);
+  await page.getByLabel('Day').fill(data.dobDay);
+  await page.getByLabel('Month').fill(data.dobMonth);
+  await page.getByLabel('Year').fill(data.dobYear);
   await page.getByLabel('National Insurance number').fill(data.nationalInsurance);
 }
 

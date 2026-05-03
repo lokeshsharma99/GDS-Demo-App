@@ -30,8 +30,10 @@ test.describe('FR-02: Step 1 — Personal Details', () => {
     await expect(page.getByLabel('Last name')).toBeVisible();
   });
 
-  test('FR-02-05: Date of birth field renders with correct label', async ({ page }) => {
-    await expect(page.getByLabel('Date of birth')).toBeVisible();
+  test('FR-02-05: Date of birth field renders with Day, Month and Year inputs', async ({ page }) => {
+    await expect(page.getByLabel('Day')).toBeVisible();
+    await expect(page.getByLabel('Month')).toBeVisible();
+    await expect(page.getByLabel('Year')).toBeVisible();
   });
 
   test('FR-02-06: National Insurance number field renders with correct label', async ({ page }) => {
