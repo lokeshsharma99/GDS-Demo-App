@@ -5,7 +5,9 @@ import { FormData } from '../../types/form';
 const emptyForm: FormData = {
   firstName: '',
   lastName: '',
-  dateOfBirth: '',
+  dobDay: '',
+  dobMonth: '',
+  dobYear: '',
   nationalInsurance: '',
   email: '',
   phone: '',
@@ -39,7 +41,9 @@ describe('validateStep', () => {
         ...emptyForm,
         firstName: 'Jane',
         lastName: 'Smith',
-        dateOfBirth: '1990-01-01',
+        dobDay: '1',
+        dobMonth: '1',
+        dobYear: '1990',
         nationalInsurance: 'AB123456C',
       };
       const result = validateStep(1, filledForm);
