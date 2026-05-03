@@ -10,12 +10,12 @@ See the [GitHub Issues](https://github.com/lokeshsharma99/GDS-Demo-App/issues) f
 
 | Ticket | Title | Priority |
 |--------|-------|----------|
-| [#1](https://github.com/lokeshsharma99/GDS-Demo-App/issues/1) | Add GDS error summary panel at top of page | High |
-| [#2](https://github.com/lokeshsharma99/GDS-Demo-App/issues/2) | Implement form validation rules | High |
 | [#3](https://github.com/lokeshsharma99/GDS-Demo-App/issues/3) | Add session timeout warning | Medium |
 | [#4](https://github.com/lokeshsharma99/GDS-Demo-App/issues/4) | Add unit tests with Vitest | Medium |
 | [#5](https://github.com/lokeshsharma99/GDS-Demo-App/issues/5) | Welsh language (Cymraeg) support | Low |
 | [#6](https://github.com/lokeshsharma99/GDS-Demo-App/issues/6) | Print/PDF stylesheet | Low |
+| [#7](https://github.com/lokeshsharma99/GDS-Demo-App/issues/7) | Automated accessibility tests (axe-core) | Medium |
+| [#8](https://github.com/lokeshsharma99/GDS-Demo-App/issues/8) | Check answers page before submission | High |
 
 ---
 
@@ -27,25 +27,34 @@ See the [GitHub Issues](https://github.com/lokeshsharma99/GDS-Demo-App/issues) f
 - [x] WCAG 2.1 AA compliance
 - [x] GitHub Actions CI/CD pipeline
 - [x] GitHub Pages deployment
-- [x] Remove all Coming Soon placeholder services
 
-### Phase 2 — Quality (In Progress)
-- [ ] GDS error summary panel
-- [ ] Comprehensive form validation
+### Phase 2 — GOV.UK Design Compliance ✅ Complete
+- [x] Multi-page routing (React Router v6 HashRouter) — one URL per step
+- [x] GOV.UK error summary panel at top of page with focus management
+- [x] GOV.UK date input pattern — 3 separate text fields (day/month/year)
+- [x] Comprehensive form validation with GOV.UK-style error messages
+- [x] Unique `<title>` per page matching the question heading
+- [x] Visible "Error: " prefix on field-level error messages (GOV.UK standard)
+- [x] Removed asterisks from required fields (not GOV.UK style)
+- [x] Tolerant validation (NI number, phone, postcode accept multiple formats)
+- [x] Shared form state via React Context (FormProvider)
+
+### Phase 3 — Quality (In Progress)
+- [ ] Check answers page (GOV.UK check answers pattern) before submission
 - [ ] Unit and integration tests
-- [ ] Accessibility audit with axe-core
+- [ ] Accessibility audit with axe-core in CI
 
-### Phase 3 — Enhancement
+### Phase 4 — Enhancement
 - [ ] Save and return functionality
-- [ ] Session timeout warning
+- [ ] Session timeout warning (GOV.UK pattern)
 - [ ] Welsh language support
 - [ ] Print stylesheet
-- [ ] Cookie consent banner
+- [ ] Cookie consent banner (GOV.UK cookie banner component)
 
-### Phase 4 — Future
+### Phase 5 — Future
 - [ ] Backend API integration
 - [ ] GOV.UK One Login / GOV.UK Notify integration
-- [ ] Additional services (Housing Benefit, etc.) — when implemented
+- [ ] Additional services (Housing Benefit, Jobseeker's Allowance)
 
 ---
 
@@ -53,7 +62,7 @@ See the [GitHub Issues](https://github.com/lokeshsharma99/GDS-Demo-App/issues) f
 
 | Issue | Severity | Notes |
 |-------|----------|-------|
-| No error summary panel | Medium | GDS pattern requires errors summarised at top of page |
-| Validation is no-op | High | `validateStep()` currently returns empty errors always |
-| No test coverage | Medium | No unit or E2E tests exist yet |
-| GDS Transport font requires internet | Low | Font loaded from Google Fonts — offline fallback is Arial |
+| No "Check your answers" page | Medium | GOV.UK pattern requires a review step before final submission |
+| No session timeout warning | Low | GDS pattern not yet implemented |
+| GDS Transport font requires internet | Low | Loaded from Google Fonts — offline fallback is Arial |
+| No automated a11y tests in CI | Medium | Manual review only; axe-core not integrated |
