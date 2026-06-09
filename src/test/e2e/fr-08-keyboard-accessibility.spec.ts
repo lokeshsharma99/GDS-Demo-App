@@ -25,7 +25,7 @@ test.describe('FR-08: Keyboard Accessibility', () => {
     const fields = [
       page.getByLabel('First name'),
       page.getByLabel('Last name'),
-      page.getByLabel('Date of birth'),
+      page.getByLabel('Day'),
       page.getByLabel('National Insurance number'),
     ];
 
