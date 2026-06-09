@@ -45,7 +45,6 @@ const PersonalDetailsStep: React.FC<PersonalDetailsStepProps> = ({
         value={formData.firstName}
         onChange={onChange}
         error={errors.firstName}
-        required
       />
 
       <FormInput
@@ -54,7 +53,6 @@ const PersonalDetailsStep: React.FC<PersonalDetailsStepProps> = ({
         value={formData.lastName}
         onChange={onChange}
         error={errors.lastName}
-        required
       />
 
       <DateInput
@@ -75,7 +73,6 @@ const PersonalDetailsStep: React.FC<PersonalDetailsStepProps> = ({
         error={errors.nationalInsurance}
         hint="It's on your National Insurance card, benefit letter, payslip or P60. For example, 'QQ 12 34 56 C'."
         placeholder="QQ 12 34 56 C"
-        required
       />
     </div>
   );

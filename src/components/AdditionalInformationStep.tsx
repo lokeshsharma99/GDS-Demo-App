@@ -55,7 +55,6 @@ const AdditionalInformationStep: React.FC<AdditionalInformationStepProps> = ({
         onChange={onChange}
         error={errors.employmentStatus}
         options={employmentOptions}
-        required
       />
 
       <FormInput

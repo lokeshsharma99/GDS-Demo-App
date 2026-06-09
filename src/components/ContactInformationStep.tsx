@@ -46,7 +46,6 @@ const ContactInformationStep: React.FC<ContactInformationStepProps> = ({
         onChange={onChange}
         error={errors.email}
         hint="We'll only use this to contact you about your application."
-        required
       />
 
       <FormInput
@@ -57,7 +56,6 @@ const ContactInformationStep: React.FC<ContactInformationStepProps> = ({
         onChange={onChange}
         error={errors.phone}
         hint="Include the country code for international numbers."
-        required
       />
 
       <FormInput
@@ -66,7 +64,6 @@ const ContactInformationStep: React.FC<ContactInformationStepProps> = ({
         value={formData.address}
         onChange={onChange}
         error={errors.address}
-        required
       />
 
       <FormInput
@@ -75,7 +72,6 @@ const ContactInformationStep: React.FC<ContactInformationStepProps> = ({
         value={formData.city}
         onChange={onChange}
         error={errors.city}
-        required
       />
 
       <FormInput
@@ -86,7 +82,6 @@ const ContactInformationStep: React.FC<ContactInformationStepProps> = ({
         error={errors.postcode}
         placeholder="SW1A 1AA"
         hint="For example, SW1A 1AA"
-        required
       />
     </div>
   );
