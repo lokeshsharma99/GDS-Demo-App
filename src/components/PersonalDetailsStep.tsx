@@ -71,8 +71,6 @@ const PersonalDetailsStep: React.FC<PersonalDetailsStepProps> = ({
         value={formData.nationalInsurance}
         onChange={onChange}
         error={errors.nationalInsurance}
-        hint="It's on your National Insurance card, benefit letter, payslip or P60. For example, 'QQ 12 34 56 C'."
-        placeholder="QQ 12 34 56 C"
       />
     </div>
   );

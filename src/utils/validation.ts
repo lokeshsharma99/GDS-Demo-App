@@ -49,14 +49,6 @@ export const validateStep = (step: number, formData: FormData): FormErrors => {
       }
     }
 
-    // National Insurance — validate format only if a value is provided
-    if (formData.nationalInsurance.trim()) {
-      const niNormalised = formData.nationalInsurance.replace(/\s/g, '').toUpperCase();
-      if (!/^[A-CEGHJ-PR-TW-Z]{2}\d{6}[A-D]$/i.test(niNormalised)) {
-        errors.nationalInsurance =
-          "Enter a National Insurance number in the correct format, like 'QQ 12 34 56 C'";
-      }
-    }
   }
 
   if (step === 2) {
